@@ -18,9 +18,16 @@ namespace Light_App.Controllers
         {
             try
             {
+                if (_client != null && _client.Connected)
+                {
+                    // If a device is already connected, return an error
+                    return Json(new { success = false, message = "Another device is already connected." });
+                }
+
                 BluetoothAddress address = BluetoothAddress.Parse(deviceAddress);
                 _client = new BluetoothClient();
                 _client.Connect(address, BluetoothService.SerialPort);
+
                 return Json(new { success = true });
             }
             catch (Exception ex)

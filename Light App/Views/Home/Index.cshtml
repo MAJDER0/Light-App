@@ -6,10 +6,22 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script>
         function lookForDevices() {
+            // Show loading message with animated dots
+            var loadingMessage = $("#loadingMessage");
+            loadingMessage.text("Loading");
+            loadingMessage.show();
+            var dots = 0;
+            var interval = setInterval(function () {
+                dots = (dots + 1) % 4;
+                loadingMessage.text("Loading" + ".".repeat(dots));
+            }, 300);
+
             $.ajax({
                 type: "GET",
                 url: "/Bluetooth/LookForDevices",
                 success: function (response) {
+                    clearInterval(interval); // Stop the animation when the request is successful
+                    loadingMessage.hide(); // Hide the loading message
                     if (response.success) {
                         $("#deviceList").empty();
                         response.devices.forEach(function (device) {
@@ -22,6 +34,8 @@
                     }
                 },
                 error: function (error) {
+                    clearInterval(interval); // Stop the animation in case of error
+                    loadingMessage.hide(); // Hide the loading message
                     console.error("Error looking for devices:", error);
                 }
             });
@@ -91,6 +105,7 @@
                     if (response.success) {
                         console.log("Light toggled. Light is now " + (response.lightStatus ? "ON" : "OFF"));
                         $("#lightSwitch").prop("checked", response.lightStatus);
+                        document.body.classList.toggle('on', response.lightStatus); // Add this line to toggle class based on light status
                     } else {
                         console.error("Error:", response.message);
                     }
@@ -154,11 +169,29 @@
                 }
             });
         }
-
     </script>
+
 </head>
 <body>
     <div class="container">
+
+
+
+        <div class="light">
+
+            <div class="wire"></div>
+
+            <div class="bulb">
+
+                <span></span>
+
+                <span></span>
+
+            </div>
+
+        </div>
+
+
         <h1>LIGHT ROOM APP</h1>
 
         <div id="connectionStatus"></div>
@@ -168,6 +201,9 @@
             <button id="connectButton" class="btn btn-success" style="display: none;" onclick="connectToDevice()">Connect to Device</button>
             <button id="disconnectButton" class="btn btn-danger" style="display: none;" onclick="disconnectFromDevice()">Disconnect from Device</button>
         </div>
+
+        <div id="loadingMessage" style="display: none;"></div>
+
 
         <div id="deviceSelection" style="display: none;">
             <select id="deviceList" class="form-control mb-3" style="border: none;"></select>
