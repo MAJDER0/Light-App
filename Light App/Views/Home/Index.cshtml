@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Bluetooth Control</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function lookForDevices() {
+            $.ajax({
+                type: "GET",
+                url: "/Bluetooth/LookForDevices",
+                success: function (response) {
+                    if (response.success) {
+                        // Clear previous device list
+                        $("#deviceList").empty();
+                        // Add devices to the list
+                        response.devices.forEach(function (device) {
+                            $("#deviceList").append('<option value="' + device.address + '">' + device.name + '</option>');
+                        });
+                        // Show the device selection dropdown
+                        $("#deviceSelection").show();
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error looking for devices:", error);
+                }
+            });
+        }
+
+        function connectToDevice() {
+            var deviceAddress = $("#deviceList").val();
+
+            $.ajax({
+                type: "POST",
+                url: "/Bluetooth/ConnectToDevice",
+                data: { deviceAddress: deviceAddress },
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Connected to device.");
+                        // Hide the device selection dropdown after successful connection
+                        $("#deviceSelection").hide();
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error connecting to device:", error);
+                }
+            });
+        }
+    </script>
+</head>
+<body>
+    <h1>Bluetooth Control</h1>
+    <button onclick="lookForDevices()">Search for Devices</button>
+    <div id="deviceSelection" style="display: none;">
+        <label for="deviceList">Select a Device:</label>
+        <select id="deviceList"></select>
+        <button onclick="connectToDevice()">Connect to Bluetooth</button>
+    </div>
+</body>
+</html>

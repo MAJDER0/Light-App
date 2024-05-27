@@ -1,0 +1,30 @@
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.csproj.AssemblyReference.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.AssemblyInfoInputs.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.AssemblyInfo.cs
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.csproj.CoreCompileInputs.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.RazorAssemblyInfo.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.RazorAssemblyInfo.cs
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\appsettings.json
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.staticwebassets.runtime.json
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.exe
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.deps.json
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.runtimeconfig.json
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.dll
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\Light App.pdb
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\InTheHand.Net.Personal.dll
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\scopedcss\bundle\Light App.styles.css
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\scopedcss\projectbundle\Light App.bundle.scp.css
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.csproj.CopyComplete
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.dll
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\refint\Light App.dll
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.pdb
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\Light App.genruntimeconfig.cache
+C:\Users\Tomek\source\repos\Light App\Light App\obj\Debug\net6.0\ref\Light App.dll
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Tomek\source\repos\Light App\Light App\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
