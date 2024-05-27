@@ -82,6 +82,16 @@ class _BluetoothControlScreenState extends State<BluetoothControlScreen> {
     }
   }
 
+  Future<void> disconnectFromDevice() async {
+    if (isConnected) {
+      await connection.close();
+      setState(() {
+        isConnected = false;
+        selectedDevice = null;
+      });
+    }
+  }
+
   Future<BluetoothDevice?> showDeviceListDialog() async {
     return showDialog<BluetoothDevice>(
       context: context,
@@ -154,7 +164,7 @@ class _BluetoothControlScreenState extends State<BluetoothControlScreen> {
               },
               child: Text('CONNECT TO BLUETOOTH'),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20), // Even space between buttons
             ElevatedButton(
               onPressed: () async {
                 // Trigger Bluetooth discovery to find available devices
@@ -163,12 +173,20 @@ class _BluetoothControlScreenState extends State<BluetoothControlScreen> {
               },
               child: Text('LOOK FOR DEVICES'),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20), // Even space between buttons
+            if (isConnected)
+              ElevatedButton(
+                onPressed: () async {
+                  await disconnectFromDevice();
+                },
+                child: Text('DISCONNECT DEVICE'), // Changed button text
+              ),
+            SizedBox(height: 20), // Even space between buttons
             Text(
               isConnected ? 'CONNECTED: ${selectedDevice?.name}' : '',
-              style: TextStyle(fontSize: 18, color: Colors.white),
+              style: TextStyle(fontSize: 18, color: isConnected ? Colors.green : Colors.white), // Changed text color
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20), // Even space between buttons
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -183,10 +201,8 @@ class _BluetoothControlScreenState extends State<BluetoothControlScreen> {
                     setState(() {
                       isLightOn = value;
                     });
-
-                    // Send command to the connected device (you may customize this based on your protocol)
                     if (isConnected) {
-                      connection.output.add(Uint8List.fromList(isLightOn ? [1] : [0]));
+                      connection.output.add(Uint8List.fromList(isLightOn ? [0] : [1]));
 
                       // await the Future returned by allSent to ensure the write operation is completed
                       await connection.output.allSent;
@@ -199,7 +215,7 @@ class _BluetoothControlScreenState extends State<BluetoothControlScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 20), // Even space between buttons
             Text(
               'THE LIGHT IS CURRENTLY ${isLightOn ? 'ON' : 'OFF'}',
               style: TextStyle(fontSize: 18, color: Colors.white),
