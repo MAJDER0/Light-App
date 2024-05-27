@@ -30,6 +30,16 @@
         function connectToDevice() {
             var deviceAddress = $("#deviceList").val();
 
+            var connectedDeviceAddress = "";
+            if ($("#connectionStatus").text().includes("Currently Connected to")) {
+                connectedDeviceAddress = $("#connectionStatus").text().split("Currently Connected to: ")[1];
+            }
+
+            if (deviceAddress === connectedDeviceAddress) {
+                // If the selected device is already connected, do nothing
+                return;
+            }
+
             $.ajax({
                 type: "POST",
                 url: "/Bluetooth/ConnectToDevice",
@@ -38,6 +48,7 @@
                     if (response.success) {
                         console.log("Connected to device.");
                         $("#toggleSwitch").show();
+                        $("#disconnectButton").show(); // Show the disconnect button
                         // Display the connection status message
                         $("#connectionStatus").text("Currently Connected to: " + $("#deviceList option:selected").text()).css("color", "green");
                     } else {
@@ -46,6 +57,26 @@
                 },
                 error: function (error) {
                     console.error("Error connecting to device:", error);
+                }
+            });
+        }
+
+        function disconnectFromDevice() {
+            $.ajax({
+                type: "POST",
+                url: "/Bluetooth/DisconnectFromDevice",
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Disconnected from device.");
+                        $("#toggleSwitch").hide();
+                        $("#disconnectButton").hide(); // Hide the disconnect button
+                        $("#connectionStatus").text("Not connected").css("color", "red");
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error disconnecting from device:", error);
                 }
             });
         }
@@ -89,7 +120,8 @@
                         // Populate the device list
                         populateDeviceList();
                         // Display the connection status message
-                        $("#connectionStatus").text("Currently Connected to " + response.connectedDevice).css("color", "green");
+                        $("#connectionStatus").text("Currently Connected to: " + response.connectedDevice).css("color", "green");
+                        $("#disconnectButton").show(); // Show the disconnect button if already connected
                     } else {
                         // If not connected, show only the search button
                         $("#buttonGroup").show();
@@ -134,11 +166,12 @@
         <div id="buttonGroup">
             <button class="btn btn-primary" onclick="lookForDevices()">Search for Devices</button>
             <button id="connectButton" class="btn btn-success" style="display: none;" onclick="connectToDevice()">Connect to Device</button>
+            <button id="disconnectButton" class="btn btn-danger" style="display: none;" onclick="disconnectFromDevice()">Disconnect from Device</button>
         </div>
 
         <div id="deviceSelection" style="display: none;">
             <select id="deviceList" class="form-control mb-3" style="border: none;"></select>
-        </div>       
+        </div>
 
         <div id="toggleSwitch" style="display: none;">
             <span id="turnText">TURN</span>

@@ -29,6 +29,29 @@ namespace Light_App.Controllers
             }
         }
 
+        // Endpoint for disconnecting from a Bluetooth device
+        [HttpPost]
+        public ActionResult DisconnectFromDevice()
+        {
+            try
+            {
+                if (_client != null && _client.Connected)
+                {
+                    _client.Close();
+                    _client = null;
+                    return Json(new { success = true });
+                }
+                else
+                {
+                    return Json(new { success = false, message = "No device is connected." });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
+        }
+
         // Endpoint for discovering available devices
         [HttpGet]
         public ActionResult<IEnumerable<BluetoothDevice>> LookForDevices()
@@ -63,7 +86,7 @@ namespace Light_App.Controllers
                 if (_client != null && _client.Connected)
                 {
                     _isLightOn = !_isLightOn;
-                    byte[] command = _isLightOn ? new byte[] { 1 } : new byte[] { 0 };
+                    byte[] command = _isLightOn ? new byte[] { 0 } : new byte[] { 1 };
                     _client.GetStream().Write(command, 0, command.Length);
                     return Json(new { success = true, lightStatus = _isLightOn });
                 }
@@ -77,7 +100,6 @@ namespace Light_App.Controllers
                 return Json(new { success = false, message = ex.Message });
             }
         }
-
 
         [HttpGet]
         public ActionResult CheckConnectionStatus()
