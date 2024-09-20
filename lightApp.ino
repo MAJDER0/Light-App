@@ -1,14 +1,14 @@
 #include <SoftwareSerial.h>
 
 // Define TX and RX pins for the Bluetooth module
-SoftwareSerial bluetooth(9, 3);//Actual pins on my circuit
+SoftwareSerial bluetooth(9, 3);//Actual pins on circuit
 
 // Define pin for controlling the light
-const int lightPin = 7; // actual pin on my circuit
+const int lightPin = 7; // Actual pin on circuit
 
 void setup() {
-  // Initialize serial communication at 9600 bps for debugging
-  bluetooth.begin(9600); // Change initialization to "bluetooth.begin(9600);"
+  // Initialize serial communication at 9600 bps
+  bluetooth.begin(9600);
   Serial.begin(9600);
 
   // Set the light pin as an output
@@ -16,8 +16,8 @@ void setup() {
 }
 
 void loop() {
-  if (bluetooth.available()) { // Change condition to check "bluetooth.available()"
-    char receivedChar = bluetooth.read(); // Change read source to "bluetooth"
+  if (bluetooth.available()) { 
+    char receivedChar = bluetooth.read();
     Serial.print("Received: ");
     Serial.println(receivedChar, HEX);
 
