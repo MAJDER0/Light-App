@@ -1,10 +1,10 @@
 #include <SoftwareSerial.h>
 
 // Define TX and RX pins for the Bluetooth module
-SoftwareSerial bluetooth(2, 3); // Change variable name to "bluetooth"
+SoftwareSerial bluetooth(9, 3);//Actual pins on my circuit
 
 // Define pin for controlling the light
-const int lightPin = 4; // Change this to the actual pin connected to your light
+const int lightPin = 7; // actual pin on my circuit
 
 void setup() {
   // Initialize serial communication at 9600 bps for debugging
