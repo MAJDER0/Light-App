@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Bluetooth Control</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        function lookForDevices() {
+            // Show loading message with animated dots
+            var loadingMessage = $("#loadingMessage");
+            loadingMessage.text("Loading");
+            loadingMessage.show();
+            var dots = 0;
+            var interval = setInterval(function () {
+                dots = (dots + 1) % 4;
+                loadingMessage.text("Loading" + ".".repeat(dots));
+            }, 300);
+
+            $.ajax({
+                type: "GET",
+                url: "/Bluetooth/LookForDevices",
+                success: function (response) {
+                    clearInterval(interval); // Stop the animation when the request is successful
+                    loadingMessage.hide(); // Hide the loading message
+                    if (response.success) {
+                        $("#deviceList").empty();
+                        response.devices.forEach(function (device) {
+                            $("#deviceList").append('<option value="' + device.address + '">' + device.name + '</option>');
+                        });
+                        $("#deviceSelection").show();
+                        $("#connectButton").show(); // Show the connect button
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    clearInterval(interval); // Stop the animation in case of error
+                    loadingMessage.hide(); // Hide the loading message
+                    console.error("Error looking for devices:", error);
+                }
+            });
+        }
+
+        function connectToDevice() {
+            var deviceAddress = $("#deviceList").val();
+
+            var connectedDeviceAddress = "";
+            if ($("#connectionStatus").text().includes("Currently Connected to")) {
+                connectedDeviceAddress = $("#connectionStatus").text().split("Currently Connected to: ")[1];
+            }
+
+            if (deviceAddress === connectedDeviceAddress) {
+                // If the selected device is already connected, do nothing
+                return;
+            }
+
+            $.ajax({
+                type: "POST",
+                url: "/Bluetooth/ConnectToDevice",
+                data: { deviceAddress: deviceAddress },
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Connected to device.");
+                        $("#toggleSwitch").show();
+                        $("#disconnectButton").show(); // Show the disconnect button
+                        // Display the connection status message
+                        $("#connectionStatus").text("Currently Connected to: " + $("#deviceList option:selected").text()).css("color", "green");
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error connecting to device:", error);
+                }
+            });
+        }
+
+        function disconnectFromDevice() {
+            $.ajax({
+                type: "POST",
+                url: "/Bluetooth/DisconnectFromDevice",
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Disconnected from device.");
+                        $("#toggleSwitch").hide();
+                        $("#disconnectButton").hide(); // Hide the disconnect button
+                        $("#connectionStatus").text("Not connected").css("color", "red");
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error disconnecting from device:", error);
+                }
+            });
+        }
+
+        function toggleLight() {
+            var isChecked = $("#lightSwitch").prop("checked");
+            $("#statusText").text(isChecked ? "ON" : "OFF");
+            $.ajax({
+                type: "POST",
+                url: "/Bluetooth/ToggleLight",
+                success: function (response) {
+                    if (response.success) {
+                        console.log("Light toggled. Light is now " + (response.lightStatus ? "ON" : "OFF"));
+                        $("#lightSwitch").prop("checked", response.lightStatus);
+                        document.body.classList.toggle('on', response.lightStatus); // Add this line to toggle class based on light status
+                    } else {
+                        console.error("Error:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error toggling light:", error);
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            // Check connection status on page load
+            checkConnectionStatus();
+        });
+
+        function checkConnectionStatus() {
+            $.ajax({
+                type: "GET",
+                url: "/Bluetooth/CheckConnectionStatus",
+                success: function (response) {
+                    if (response.success && response.isConnected) {
+                        // If connected, show all buttons and the device list
+                        $("#toggleSwitch, #connectButton, #deviceSelection").show();
+                        // Set the initial state of the toggle switch based on the light status
+                        $("#lightSwitch").prop("checked", response.lightStatus);
+                        $("#statusText").text(response.lightStatus ? "ON" : "OFF");
+                        // Populate the device list
+                        populateDeviceList();
+                        // Display the connection status message
+                        $("#connectionStatus").text("Currently Connected to: " + response.connectedDevice).css("color", "green");
+                        $("#disconnectButton").show(); // Show the disconnect button if already connected
+                    } else {
+                        // If not connected, show only the search button
+                        $("#buttonGroup").show();
+                    }
+                },
+                error: function (error) {
+                    console.error("Error checking connection status:", error);
+                }
+            });
+        }
+
+        function populateDeviceList() {
+            $.ajax({
+                type: "GET",
+                url: "/Bluetooth/LookForDevices",
+                success: function (response) {
+                    if (response.success) {
+                        $("#deviceList").empty();
+                        response.devices.forEach(function (device) {
+                            $("#deviceList").append('<option value="' + device.address + '">' + device.name + '</option>');
+                        });
+                        // Show the device list after populating it
+                        $("#deviceSelection").show();
+                    } else {
+                        console.error("Error looking for devices:", response.message);
+                    }
+                },
+                error: function (error) {
+                    console.error("Error looking for devices:", error);
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+    <div class="container">
+
+
+
+        <div class="light">
+
+            <div class="wire"></div>
+
+            <div class="bulb">
+
+                <span></span>
+
+                <span></span>
+
+            </div>
+
+        </div>
+
+
+        <h1>LIGHT ROOM APP</h1>
+
+        <div id="connectionStatus"></div>
+
+        <div id="buttonGroup">
+            <button class="btn btn-primary" onclick="lookForDevices()">Search for Devices</button>
+            <button id="connectButton" class="btn btn-success" style="display: none;" onclick="connectToDevice()">Connect to Device</button>
+            <button id="disconnectButton" class="btn btn-danger" style="display: none;" onclick="disconnectFromDevice()">Disconnect from Device</button>
+        </div>
+
+        <div id="loadingMessage" style="display: none;"></div>
+
+
+        <div id="deviceSelection" style="display: none;">
+            <select id="deviceList" class="form-control mb-3" style="border: none;"></select>
+        </div>
+
+        <div id="toggleSwitch" style="display: none;">
+            <span id="turnText">TURN</span>
+            <label class="switch" for="lightSwitch">
+                <input type="checkbox" id="lightSwitch" onclick="toggleLight()">
+                <span class="slider round"></span>
+            </label>
+            <span id="statusText">OFF</span>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "dgSpecHash": "WUsBI5LihK4mNyM8LnsdHbkwY7PG79sTBduP07xSs/yUWV7r/kbCZ5uYY8Wf70R5cNjbnQZDH002QlR43a2abw==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Tomek\\source\\repos\\Light App\\Light App\\Light App.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Tomek\\.nuget\\packages\\32feet.net\\3.5.0\\32feet.net.3.5.0.nupkg.sha512",
+    "C:\\Users\\Tomek\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\system.configuration.configurationmanager.8.0.0.nupkg.sha512",
+    "C:\\Users\\Tomek\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512"
+  ],
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package '32feet.NET 3.5.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0'. This package may not be fully compatible with your project.",
+      "libraryId": "32feet.NET",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}
